@@ -1,0 +1,98 @@
+# Кейс-задача №2
+# Тестовая программа, демонстрирующая работу методов
+# базового и производного классов (наследование, переопределение
+# методов, вызов метода базового класса через super()).
+
+
+class Animal:
+    """Базовый класс."""
+
+    def __init__(self, name, sound):
+        self.name = name
+        self.sound = sound
+
+    def make_sound(self):
+        print(f"{self.name} издаёт звук: {self.sound}")
+
+    def info(self):
+        print(f"Это животное по имени {self.name}.")
+
+    def move(self):
+        print(f"{self.name} передвигается.")
+
+
+class Dog(Animal):
+    """Производный класс, расширяющий базовый Animal."""
+
+    def __init__(self, name, breed):
+        # Вызов конструктора базового класса
+        super().__init__(name, sound="Гав!")
+        self.breed = breed
+
+    # Переопределение (override) метода базового класса
+    def info(self):
+        # Вызов метода базового класса из переопределённого метода
+        super().info()
+        print(f"Порода: {self.breed}.")
+
+    # Переопределение метода базового класса
+    def move(self):
+        print(f"{self.name} бежит на четырёх лапах.")
+
+    # Метод, характерный только для производного класса
+    def fetch(self):
+        print(f"{self.name} приносит палку хозяину.")
+
+
+class Cat(Animal):
+    """Ещё один производный класс от Animal."""
+
+    def __init__(self, name):
+        super().__init__(name, sound="Мяу!")
+
+    def info(self):
+        super().info()
+        print("Это кошка.")
+
+    def move(self):
+        print(f"{self.name} крадётся бесшумно.")
+
+
+def demonstrate(animal):
+    """Демонстрация полиморфизма: один и тот же вызов метода
+    работает по-разному в зависимости от реального типа объекта."""
+    animal.info()
+    animal.make_sound()
+    animal.move()
+    print("-" * 40)
+
+
+def main():
+    print("=== Работа методов базового класса Animal ===")
+    generic_animal = Animal("Неизвестное животное", "какой-то звук")
+    demonstrate(generic_animal)
+
+    print("=== Работа методов производного класса Dog ===")
+    dog = Dog("Шарик", "Дворняга")
+    demonstrate(dog)
+    dog.fetch()  # метод, доступный только у Dog
+    print("-" * 40)
+
+    print("=== Работа методов производного класса Cat ===")
+    cat = Cat("Мурка")
+    demonstrate(cat)
+
+    print("=== Полиморфизм: перебор списка разнотипных объектов ===")
+    animals = [generic_animal, dog, cat]
+    for a in animals:
+        a.make_sound()
+
+    print()
+    print("=== Проверка isinstance / наследования ===")
+    print(f"dog является Animal: {isinstance(dog, Animal)}")
+    print(f"dog является Dog: {isinstance(dog, Dog)}")
+    print(f"dog является Cat: {isinstance(dog, Cat)}")
+
+
+if __name__ == "__main__":
+    main()
