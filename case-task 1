@@ -1,0 +1,62 @@
+# Кейс-задача №1
+# Дан одномерный массив A размерности N.
+# Найти сумму отрицательных элементов, расположенных между
+# максимальным и минимальным элементами массива.
+
+
+def sum_negative_between_max_min(a):
+    n = len(a)
+
+    # Поиск индексов максимального и минимального элементов
+    max_index = 0
+    min_index = 0
+    for i in range(1, n):
+        if a[i] > a[max_index]:
+            max_index = i
+        if a[i] < a[min_index]:
+            min_index = i
+
+    # Определяем границы диапазона (без учёта самих max и min)
+    left = min(max_index, min_index)
+    right = max(max_index, min_index)
+
+    total = 0
+    found = False
+    for i in range(left + 1, right):
+        if a[i] < 0:
+            total += a[i]
+            found = True
+
+    return total, max_index, min_index, found
+
+
+def main():
+    n = int(input("Введите размерность массива N: "))
+    if n <= 0:
+        print("Размерность массива должна быть положительным числом.")
+        return
+
+    print(f"Введите {n} элементов массива через пробел:")
+    a = list(map(int, input().split()))
+
+    if len(a) != n:
+        print("Количество введённых элементов не совпадает с N.")
+        return
+
+    total, max_index, min_index, found = sum_negative_between_max_min(a)
+
+    print(f"Индекс максимального элемента: {max_index} (значение {a[max_index]})")
+    print(f"Индекс минимального элемента: {min_index} (значение {a[min_index]})")
+
+    if max_index == min_index:
+        print("Максимальный и минимальный элементы совпадают "
+              "(массив состоит из одинаковых элементов), "
+              "диапазон между ними пуст.")
+    elif not found:
+        print("Между максимальным и минимальным элементами отрицательных чисел нет.")
+
+    print(f"Сумма отрицательных элементов между максимумом и минимумом: {total}")
+
+
+if __name__ == "__main__":
+    main()
